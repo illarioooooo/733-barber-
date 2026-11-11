@@ -6,7 +6,7 @@
   <title>733 Barber Shop – Coiffeur &amp; Barbier à La Seyne-sur-Mer</title>
   <meta name="description" content="733 Barber Shop, barbier et coiffeur homme à La Seyne-sur-Mer : coupe, taille de barbe à l'ancienne, serviette chaude. Noté 4,9/5 sur 770+ avis. Réservation en ligne 24h/24.">
   <link rel="canonical" href="https://www.733barbershop.fr/">
-  <meta name="theme-color" content="#0B0B0B">
+  <meta name="theme-color" content="#070A12">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -224,13 +224,13 @@
 
     <!-- ============ RÉSERVER ============ -->
     <section class="section section--alt reserver" id="reserver" aria-labelledby="reserver-title">
-      <div class="container reserver__grid">
-        <div class="reveal">
+      <div class="container">
+        <header class="section__head reveal">
           <p class="eyebrow">Réservation</p>
           <h2 class="h2" id="reserver-title">Votre créneau en 30 secondes</h2>
-          <p class="section__intro">Choisissez la prestation, le barbier et l'heure qui vous arrangent sur Planity.</p>
-          <a class="btn" href="https://www.planity.com/733-barber-shop-coiffeur-barbier-83500-la-seyne-sur-mer" target="_blank" rel="noopener" data-book>Réserver sur Planity<span class="sr-only"> (nouvel onglet)</span></a>
-        </div>
+          <p class="section__intro">Choisissez la prestation, le barbier et l'heure qui vous arrangent, sans quitter le site.</p>
+        </header>
+
         <ul class="perks reveal">
           <li class="perk">
             <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
@@ -245,6 +245,32 @@
             <div><strong>Paiement sur place</strong><span>Aucun prépaiement : vous réglez au salon.</span></div>
           </li>
         </ul>
+
+        <!-- Module de réservation Planity (marque blanche).
+             La clé du salon se renseigne dans js/main.js (PLANITY_WIDGET.key).
+             Sans clé, ou si le module ne se charge pas, le bloc de repli ci-dessous reste affiché. -->
+        <div class="booking reveal" id="booking">
+          <div class="booking__bar" aria-hidden="true">
+            <span></span><span></span><span></span>
+            <p>Réservation · 733 Barber Shop</p>
+          </div>
+          <div class="booking__body">
+            <div class="booking__widget" id="planity-widget"></div>
+            <div class="booking__loading" id="booking-loading" hidden>
+              <span class="booking__spinner" aria-hidden="true"></span>
+              Chargement du module de réservation…
+            </div>
+            <div class="booking__fallback" id="booking-fallback">
+              <ol class="steps">
+                <li><span>1</span>Choisissez votre prestation</li>
+                <li><span>2</span>Votre barbier et votre créneau</li>
+                <li><span>3</span>Confirmation immédiate par SMS</li>
+              </ol>
+              <a class="btn btn--lg" href="https://www.planity.com/733-barber-shop-coiffeur-barbier-83500-la-seyne-sur-mer" target="_blank" rel="noopener" data-book>Choisir mon créneau<span class="sr-only"> sur Planity (nouvel onglet)</span></a>
+              <p class="booking__note">Réservation sécurisée via Planity · 4,9★ sur 770+ avis</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 

@@ -5,16 +5,103 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- Réservation Planity ----------
-     Planity interdit l'affichage de ses pages dans une iframe
-     (en-têtes X-Frame-Options / CSP frame-ancestors) : tous les boutons
-     « Réserver » ouvrent donc la page Planity dans un nouvel onglet. */
+  /* ---------- Module de réservation Planity intégré (marque blanche) ----------
+     1. Dans l'espace pro Planity : « Mon site internet » > copier le code d'intégration.
+     2. Reporter ici la clé (key) et, si besoin, les URL des scripts de ce code
+        (elles font foi si elles diffèrent de celles ci-dessous).
+     Tant que la clé est vide, ou si le module ne s'affiche pas, le bloc
+     « Choisir mon créneau » (ouverture de Planity dans un nouvel onglet) reste en place. */
+  var PLANITY_WIDGET = {
+    key: "",                       // [À COMPLÉTER] clé fournie par Planity
+    primaryColor: "#1B3A7A",       // bleu foncé de la charte
+    scripts: [
+      "https://d2skjte8udjqxw.cloudfront.net/widget/production/2/polyfills.latest.js",
+      "https://d2skjte8udjqxw.cloudfront.net/widget/production/2/app.latest.js"
+    ],
+    timeout: 12000                 // délai max (ms) avant d'afficher le repli
+  };
+
+  /* ---------- Boutons « Réserver » ----------
+     Planity interdit l'affichage de ses pages dans une iframe (X-Frame-Options /
+     CSP frame-ancestors). Donc :
+     - sans clé du module : tous les boutons ouvrent Planity dans un nouvel onglet ;
+     - avec clé : les boutons mènent à la section #reserver où le module est intégré
+       (le bouton de repli à l'intérieur du module garde le lien Planity). */
   var PLANITY_URL = "https://www.planity.com/733-barber-shop-coiffeur-barbier-83500-la-seyne-sur-mer";
   document.querySelectorAll("[data-book]").forEach(function (a) {
-    a.href = PLANITY_URL;
-    a.target = "_blank";
-    a.rel = "noopener";
+    if (PLANITY_WIDGET.key && !a.closest("#booking")) {
+      a.href = "#reserver";
+      a.removeAttribute("target");
+      a.removeAttribute("rel");
+      var sr = a.querySelector(".sr-only");
+      if (sr) sr.remove();
+    } else {
+      a.href = PLANITY_URL;
+      a.target = "_blank";
+      a.rel = "noopener";
+    }
   });
+
+  (function initBookingWidget() {
+    var booking = document.getElementById("booking");
+    var container = document.getElementById("planity-widget");
+    var loading = document.getElementById("booking-loading");
+    var fallback = document.getElementById("booking-fallback");
+    if (!booking || !container || !PLANITY_WIDGET.key) return; // pas de clé : repli affiché
+
+    var started = false;
+    function showFallback() {
+      if (booking.classList.contains("is-loaded")) return;
+      loading.hidden = true;
+      fallback.hidden = false;
+    }
+    function loadScript(src) {
+      return new Promise(function (resolve, reject) {
+        var s = document.createElement("script");
+        s.src = src; s.async = false; // ordre conservé (polyfills puis app)
+        s.onload = resolve; s.onerror = reject;
+        document.body.appendChild(s);
+      });
+    }
+    function start() {
+      if (started) return;
+      started = true;
+      fallback.hidden = true;
+      loading.hidden = false;
+      window.planity = {
+        key: PLANITY_WIDGET.key,
+        primaryColor: PLANITY_WIDGET.primaryColor,
+        container: container
+      };
+      // Le module est considéré chargé dès qu'il injecte du contenu
+      var mo = new MutationObserver(function () {
+        if (container.childElementCount > 0) {
+          booking.classList.add("is-loaded");
+          loading.hidden = true;
+          fallback.hidden = true;
+          mo.disconnect();
+        }
+      });
+      mo.observe(container, { childList: true, subtree: true });
+      PLANITY_WIDGET.scripts.reduce(function (p, src) {
+        return p.then(function () { return loadScript(src); });
+      }, Promise.resolve()).catch(showFallback);
+      setTimeout(showFallback, PLANITY_WIDGET.timeout);
+    }
+    // Chargement différé : uniquement quand la section approche de l'écran
+    if ("IntersectionObserver" in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { obs.disconnect(); start(); }
+      }, { rootMargin: "600px 0px" });
+      obs.observe(booking);
+    } else {
+      start();
+    }
+    // Les liens internes « Réserver » peuvent aussi déclencher le chargement
+    document.querySelectorAll('a[href="#reserver"]').forEach(function (a) {
+      a.addEventListener("click", start);
+    });
+  })();
 
   /* ---------- Header : fond au scroll + bouton flottant ---------- */
   var header = document.getElementById("header");

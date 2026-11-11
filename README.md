@@ -24,22 +24,33 @@ python3 -m http.server 8733
 ```
 puis ouvrir http://localhost:8733
 
-## Charte
+## Charte « néon »
 
 | Rôle | Valeur |
 |---|---|
-| Fond | `#0B0B0B` · sections `#151716` · cartes `#1D201F` (anthracite des murs du salon) |
-| Texte | `#F2EFEA` · secondaire `#A3A3A3` |
-| Accent unique | `#93C35A` vert végétal (plantes du salon), boutons / prix / détails |
-| Motif | hexagones (luminaires LED du plafond) |
+| Fonds | `#070A12` bleu-noir · sections `#0B1120` · cartes `#111A2E` |
+| Texte | `#F2F5FA` · paragraphes `#CDD5E3` · secondaire `#9AA7BD` |
+| Bleu foncé | `#1B3A7A` (surfaces, texte des boutons, jour actuel) · halo `#4F86FF` |
+| Accent | `#F4F8FF` blanc néon avec lueur bleutée (boutons, prix, détails), en référence aux LED hexagonales du plafond |
+| Motif | hexagones (luminaires du salon) |
 | Typos | Bebas Neue (titres) · Manrope (texte) – Google Fonts, `display=swap` |
+
+Toute la charte est dans les variables `:root` de `css/style.css` (couleurs + `--glow-*`).
 
 ## Réservation Planity
 
-Planity refuse l'affichage de ses pages dans une iframe tierce (`X-Frame-Options` / CSP `frame-ancestors`) :
-tous les boutons « Réserver » (`[data-book]`) ouvrent donc
-https://www.planity.com/733-barber-shop-coiffeur-barbier-83500-la-seyne-sur-mer dans un nouvel onglet.
-L'URL est centralisée dans `js/main.js` (`PLANITY_URL`) et réécrite au chargement.
+### Module intégré (marque blanche)
+La section `#reserver` contient un emplacement pour le module de réservation Planity.
+1. Dans l'espace pro Planity : **Mon site internet** → copier le code d'intégration.
+2. Dans `js/main.js`, objet `PLANITY_WIDGET` : coller la **clé** (`key`) et vérifier que les URL de `scripts`
+   correspondent à celles du code Planity (celles du code Planity font foi).
+3. Le module se charge en différé quand la section approche de l'écran ; tous les boutons « Réserver » du site
+   mènent alors à `#reserver`.
+4. Sans clé, si les scripts échouent ou si rien ne s'affiche en 12 s : un bloc de repli « Choisir mon créneau »
+   ouvre la page Planity dans un nouvel onglet. Le site reste donc toujours fonctionnel.
+
+### Pourquoi pas une iframe ?
+Planity refuse l'affichage de sa page publique dans une iframe tierce (`X-Frame-Options` / CSP `frame-ancestors`).
 
 ## Remplacer / ajouter des photos
 
@@ -49,6 +60,7 @@ L'URL est centralisée dans `js/main.js` (`PLANITY_URL`) et réécrite au charge
 
 ## À compléter avant la mise en ligne
 
+- [ ] **Clé du module Planity** : `js/main.js` → `PLANITY_WIDGET.key` (+ vérifier les URL des scripts)
 - [ ] **Téléphone** : `index.html` (section Infos + footer, chercher `[À COMPLÉTER]`) et ajouter `"telephone"` dans le JSON-LD
 - [ ] **Instagram / Facebook** : liens `href="#"` du footer + ajouter `"sameAs": [...]` dans le JSON-LD
 - [ ] **Vrais avis** : remplacer les 4 blocs `[AVIS À REMPLACER]` par des avis Planity réels (prénom + initiale, avec accord)
