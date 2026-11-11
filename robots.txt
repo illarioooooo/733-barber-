@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /_sources/
+Disallow: /tools/
+
+Sitemap: https://www.733barbershop.fr/sitemap.xml
