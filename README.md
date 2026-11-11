@@ -28,10 +28,9 @@ puis ouvrir http://localhost:8733
 
 | Rôle | Valeur |
 |---|---|
-| Fonds | `#070A12` bleu-noir · sections `#0B1120` · cartes `#111A2E` |
-| Texte | `#F2F5FA` · paragraphes `#CDD5E3` · secondaire `#9AA7BD` |
-| Bleu foncé | `#1B3A7A` (surfaces, texte des boutons, jour actuel) · halo `#4F86FF` |
-| Accent | `#F4F8FF` blanc néon avec lueur bleutée (boutons, prix, détails), en référence aux LED hexagonales du plafond |
+| Fonds | `#050505` noir profond · sections `#0E0E0E` · cartes `#161616` |
+| Texte | `#F5F5F5` · paragraphes `#D0D0D0` · secondaire `#A0A0A0` |
+| Accent | `#FAFAFA` blanc néon avec halo blanc (boutons, prix, détails), en référence aux LED hexagonales du plafond · texte des boutons en noir |
 | Motif | hexagones (luminaires du salon) |
 | Typos | Bebas Neue (titres) · Manrope (texte) – Google Fonts, `display=swap` |
 

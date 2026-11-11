@@ -13,7 +13,7 @@
      « Choisir mon créneau » (ouverture de Planity dans un nouvel onglet) reste en place. */
   var PLANITY_WIDGET = {
     key: "",                       // [À COMPLÉTER] clé fournie par Planity
-    primaryColor: "#1B3A7A",       // bleu foncé de la charte
+    primaryColor: "#0B0B0B",       // noir de la charte
     scripts: [
       "https://d2skjte8udjqxw.cloudfront.net/widget/production/2/polyfills.latest.js",
       "https://d2skjte8udjqxw.cloudfront.net/widget/production/2/app.latest.js"
